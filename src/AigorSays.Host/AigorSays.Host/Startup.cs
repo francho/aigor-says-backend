@@ -58,6 +58,8 @@ namespace AigorSays.Host
             {
                 endpoints.MapDefaultControllerRoute();
             });
+
+            app.UseStaticFiles();
         }
     }
 }

@@ -27,5 +27,13 @@ namespace AigorSays.Host.Controllers
             await _mediator.Send(request);
             return NoContent();
         }
+
+        [Route("whistle")]
+        [HttpGet]
+        public async Task<ActionResult<string>> Whistle()
+        {
+            await _mediator.Send(new WhistleRequest());
+            return NoContent();
+        }
     }
 }
