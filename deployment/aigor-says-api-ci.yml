@@ -3,8 +3,7 @@
 # Add steps that run tests, create a NuGet package, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
-trigger: none
-  batch: true
+trigger: 
   branches:
      include: 
      - master
@@ -29,12 +28,30 @@ steps:
       useGlobalJson: true
 
   - task: DotNetCoreCLI@2
+    displayName: Build
+    inputs:
+      command: build
+      projects: 'src/AigorSays.Host/AigorSays.Host.csproj'
+      arguments: '--configuration $(buildConfiguration)'
+
+  - task: DotNetCoreCLI@2
     displayName: Publish
     inputs:
       command: 'publish'
       publishWebProjects: false
       projects: 'src/AigorSays.Host/AigorSays.Host.csproj'
       arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/Host'
+
+  - task: UniversalPackages@0
+    displayName: Universal Publish
+    inputs:
+      command: publish
+      publishDirectory: '$(Build.ArtifactStagingDirectory)'
+      vstsFeedPublish: 'francholab/AigorSays'
+      vstsFeedPackagePublish: 'aigorsays-api'
+      versionOption: custom
+      versionPublish: '0.1'
+      packagePublishDescription: 'AigorSays api'
 
   - task: ArchiveFiles@2
     inputs:
