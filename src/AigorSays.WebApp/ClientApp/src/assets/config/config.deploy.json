@@ -1,0 +1,6 @@
+{
+  "env": {
+    "name": "#{envName}"
+  },
+  "apiHosts": "#{apiHosts}"
+}
