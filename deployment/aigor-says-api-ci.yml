@@ -12,32 +12,49 @@ trigger:
      - src/AigorSays.Host/*
 
 pool:
-  vmImage: 'ubuntu-18.04'
+  vmImage: 'windows-latest'
 
 variables:
   buildConfiguration: 'Release'
   DOTNET_CLI_TELEMETRY_OPTOUT: true
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
 
-steps:
+stages:
+- stage: CI
+  jobs:
+  - job: Build_Api_Server
+    steps:
+    - task: UseDotNet@2
+      displayName: Use dotnet in global.json
+      inputs:
+        packageType: 'sdk'
+        useGlobalJson: true
 
-  - task: UseDotNet@2
-    displayName: Use dotnet in global.json
-    inputs:
-      packageType: 'sdk'
-      useGlobalJson: true
+    - task: DotNetCoreCLI@2
+      displayName: Publish
+      inputs:
+        command: publish
+        publishWebProjects: false
+        projects: 'src/AigorSays.Host/AigorSays.Host.csproj'
+        arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory) -r win-x64 --self-contained true'
+        zipAfterPublish: True
+    
+    - task: PublishPipelineArtifact@1
+      displayName: 'Publish Artifacts'
+      inputs:
+        targetPath: '$(Build.ArtifactStagingDirectory)'
+        artifact: 'AigorSays.Host'
+        publishLocation: 'pipeline'
 
-  - task: DotNetCoreCLI@2
-    displayName: Build
-    inputs:
-      command: build
-      projects: 'src/AigorSays.Host/AigorSays.Host.csproj'
-      arguments: '--configuration Release --output $(Build.ArtifactStagingDirectory)/Host -r win-x64 --self-contained true'
-
-  - task: ArchiveFiles@2
-    inputs:
-      rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/Host'
-      includeRootFolder: false
-      archiveType: 'zip'
-      archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.Repository.Name)-$(Build.BuildNumber).zip'
-      replaceExistingArchive: true
+  - job: Build_Webapp
+    steps:
+      - task: Npm@1
+        inputs:
+          command: 'custom'
+          customCommand: 'run build-ci'
+          workingDir: 'src/AigorSays.WebApp/ClientApp'
+      - task: PublishBuildArtifacts@1
+        inputs:
+          PathtoPublish: 'src/AigorSays.WebApp/ClientApp/dist'
+          ArtifactName: 'AigorSays.WebApp'
+          publishLocation: 'Container'
