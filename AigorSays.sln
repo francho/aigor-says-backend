@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AigorSays.Host", "src\AigorSays.Host\AigorSays.Host\AigorSays.Host.csproj", "{D96B8D29-6002-4091-A318-CC8A0EF3C1AC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AigorSays.Host", "src\AigorSays.Host\AigorSays.Host.csproj", "{D96B8D29-6002-4091-A318-CC8A0EF3C1AC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AigorSays.WebApp", "src\AigorSays.WebApp\AigorSays.WebApp.csproj", "{7B4004D6-9DB1-4BED-856D-1855F354A771}"
 EndProject
