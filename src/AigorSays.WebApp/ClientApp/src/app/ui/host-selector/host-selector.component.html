@@ -1,0 +1,9 @@
+<ul class="nav nav-pills">
+  <li *ngFor="let host of hosts">
+    <a class="nav-link" [routerLink]="['/talk', host.id]" routerLinkActive="active">
+      {{host.name}}
+      <span class="badge badge-pill"
+            [ngClass]="{'badge-success':  host.isAlive, 'badge-danger': !host.isAlive}">{{ host.isAlive ? 'on' : 'off' }}</span>
+    </a>
+  </li>
+</ul>
