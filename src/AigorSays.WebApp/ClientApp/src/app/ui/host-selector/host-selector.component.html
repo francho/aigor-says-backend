@@ -1,9 +1,14 @@
-<ul class="nav nav-pills">
-  <li *ngFor="let host of hosts">
-    <a class="nav-link" [routerLink]="['/talk', host.id]" routerLinkActive="active">
-      {{host.name}}
-      <span class="badge badge-pill"
-            [ngClass]="{'badge-success':  host.isAlive, 'badge-danger': !host.isAlive}">{{ host.isAlive ? 'on' : 'off' }}</span>
-    </a>
-  </li>
-</ul>
+<nav mat-tab-nav-bar>
+
+  <a mat-tab-link
+     *ngFor="let host of hosts"
+     [routerLink]="['/talk', host.id]"
+     routerLinkActive #rla="routerLinkActive"
+     [active]="rla.isActive"
+  >
+      <span
+        matBadge="{{ host.isAlive ? 'on' : 'off' }}"
+        matBadgeOverlap="false"
+        [matBadgeColor]="host.isAlive?'accent':'warn'" >{{host.name}}</span>
+  </a>
+</nav>

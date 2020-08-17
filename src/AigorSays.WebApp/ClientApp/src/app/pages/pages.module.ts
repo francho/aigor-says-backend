@@ -5,6 +5,11 @@ import {UiModule} from "../ui/ui.module";
 import {TalkComponent} from './talk/talk.component';
 import {RouterModule} from "@angular/router";
 import {FormsModule} from "@angular/forms";
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatInputModule} from "@angular/material/input";
+import {MatCardModule} from "@angular/material/card";
+import {MatButtonModule} from "@angular/material/button";
+import {FlexLayoutModule} from "@angular/flex-layout";
 
 
 @NgModule({
@@ -19,6 +24,11 @@ import {FormsModule} from "@angular/forms";
       {path: 'talk/:id', component: TalkComponent}
     ]),
     FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatCardModule,
+    MatButtonModule,
+    FlexLayoutModule,
   ]
 })
 export class PagesModule {
