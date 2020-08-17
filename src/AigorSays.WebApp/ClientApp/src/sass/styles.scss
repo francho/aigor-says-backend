@@ -1,0 +1,14 @@
+@import '@angular/material/prebuilt-themes/purple-green.css';
+
+html, body { height: 100%;}
+body {
+  margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;
+  background-image: url('assets/aigor1.png');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: bottom right;
+  background-size: contain;
+}
+.aigor-app-background {
+  background: #303030;
+}
