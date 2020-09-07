@@ -32,26 +32,7 @@ steps:
     inputs:
       command: build
       projects: 'src/AigorSays.Host/AigorSays.Host.csproj'
-      arguments: '--configuration $(buildConfiguration)'
-
-  - task: DotNetCoreCLI@2
-    displayName: Publish
-    inputs:
-      command: 'publish'
-      publishWebProjects: false
-      projects: 'src/AigorSays.Host/AigorSays.Host.csproj'
-      arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/Host'
-
-  - task: UniversalPackages@0
-    displayName: Universal Publish
-    inputs:
-      command: publish
-      publishDirectory: '$(Build.ArtifactStagingDirectory)'
-      vstsFeedPublish: 'francholab/AigorSays'
-      vstsFeedPackagePublish: 'aigorsays-api'
-      versionOption: custom
-      versionPublish: '0.1'
-      packagePublishDescription: 'AigorSays api'
+      arguments: '--configuration Release --output $(Build.ArtifactStagingDirectory)/Host -r win-x64 --self-contained true'
 
   - task: ArchiveFiles@2
     inputs:
