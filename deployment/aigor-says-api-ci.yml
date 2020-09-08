@@ -58,3 +58,28 @@ stages:
           PathtoPublish: 'src/AigorSays.WebApp/ClientApp/dist'
           ArtifactName: 'AigorSays.WebApp'
           publishLocation: 'Container'
+          
+- stage: CD
+  jobs:
+  - job: Deploy_Webapp
+    steps:
+    - download: current
+      artifact: 'AigorSays.WebApp'
+    - task: InstallSSHKey@0
+      inputs:
+        knownHostsEntry: 'github.com,140.82.121.3 ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ=='
+        sshPublicKey: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDHy1nm4Mhhe//LPIQTm0BuzgsIXoIcJ81h8xb6mnh9t/w+NAJMNM1tFPz+NfzvP5O/lULojRJ52zj3gQx3rOeA33yoikoqo5ULQYNTPXUJXgm5uboPUOMXBICa11fP5mTVkeDWmhnnoi34Hh8mDQ87QX68u+2flFiz6Qo+8vVhHcX9CNn/KzokH8uUyd17UBjsea9Au/g43m/m0ceQq7QzpZhRhTZKSQmZkZYH7+pq8vJZSR0BvFaNVuXMPQu/XZrT9Q17YxN/uAbKkCbrOh641yIyHnDdgUuuHJW9/BzkcRSQd3NiI2JFzcOIE6lIhfxqryNupfYh6bVXENOfrt/B francho@finestras'
+        sshPassphrase: $(SSH_DEPLOY_PASSWORD)
+        sshKeySecureFile: 'id_rsa'
+    - script: |
+        cd src/AigorSays.WebApp/ClientApp/dist
+        git config --local user.name "Francho Joven (CD)"
+        git config --local user.email "pub@francho.org"
+        git add .
+        git commit -m "Publishing GitHub Pages  ***NO_CI***"
+        git remote set-url --push origin git@github.com:francho/aigor-says
+        git push origin HEAD:master
+      displayName: 'Publish GitHub Pages'
+      condition: |
+        and(not(eq(variables['Build.Reason'], 'PullRequest')),
+            eq(variables['Build.SourceBranch'], 'refs/heads/master'))
