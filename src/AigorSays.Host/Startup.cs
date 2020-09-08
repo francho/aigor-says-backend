@@ -21,6 +21,7 @@ namespace AigorSays.Host
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddHealthChecks();
             services.AddSwaggerGen();
             services.AddMediatR(Assembly.GetExecutingAssembly());
         }
@@ -53,6 +54,8 @@ namespace AigorSays.Host
                     "/swagger/v1/swagger.json",
                     "Aigor Api V1");
             });
+
+            app.UseHealthChecks("/health");
             
             app.UseEndpoints(endpoints =>
             {

@@ -1,0 +1,14 @@
+<nav mat-tab-nav-bar>
+
+  <a mat-tab-link
+     *ngFor="let host of hosts"
+     [routerLink]="['/talk', host.id]"
+     routerLinkActive #rla="routerLinkActive"
+     [active]="rla.isActive"
+  >
+      <span
+        matBadge="{{ host.isAlive ? 'on' : 'off' }}"
+        matBadgeOverlap="false"
+        [matBadgeColor]="host.isAlive?'accent':'warn'" >{{host.name}}</span>
+  </a>
+</nav>

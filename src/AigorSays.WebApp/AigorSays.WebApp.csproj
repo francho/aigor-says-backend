@@ -21,6 +21,7 @@
         <Content Remove="$(SpaRoot)**" />
         <Content Include="ClientApp\src\assets\config\config.deploy.json" />
         <Content Include="ClientApp\src\assets\config\config.dev.json" />
+        <Content Include="ClientApp\src\sass\styles.scss" />
         <None Remove="$(SpaRoot)**" />
         <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
     </ItemGroup>

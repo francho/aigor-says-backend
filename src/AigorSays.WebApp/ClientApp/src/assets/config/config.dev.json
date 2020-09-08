@@ -4,9 +4,14 @@
   },
   "apiServers": [
     {
-      "id": "localhost",
-      "name": "localhost",
-      "url": "https://localhost:5001"
+      "id": "abel",
+      "name": "Abel",
+      "url": "http://clank.local:5000"
+    },
+    {
+      "id": "hugo",
+      "name": "Hugo",
+      "url": "http://bmo.local:5000"
     }
   ]
 }

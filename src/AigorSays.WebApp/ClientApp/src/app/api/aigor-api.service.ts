@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {AigorMessage} from "../models/aigor-message";
 import {Observable, of} from "rxjs";
-import {catchError} from "rxjs/operators";
+import {catchError, last, map} from "rxjs/operators";
 import {AigorSaysApiServer} from "../models/aigor-says-app-config";
 
 @Injectable({
@@ -15,9 +15,17 @@ export class AigorApiService {
 
   talk(host: AigorSaysApiServer, message: AigorMessage):  Observable<any> {
     const url = `${host.url}/api/Speaker/say`;
-    console.log(url);
     return this.http.post(url, message).pipe(
       catchError(this.handleError('talk', false))
+    )
+  }
+
+  isAlive(host: AigorSaysApiServer):  Observable<boolean> {
+    const url = `${host.url}/health`;
+    return this.http.get(url, { observe: 'response', responseType: 'text'}).pipe(
+      map(r => true),
+      last(),
+      catchError(this.handleError('isAlive', false))
     )
   }
 

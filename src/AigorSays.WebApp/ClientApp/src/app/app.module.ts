@@ -7,6 +7,8 @@ import {AppComponent} from "./app.component";
 import {PagesModule} from "./pages/pages.module";
 import {UiModule} from "./ui/ui.module";
 import {AppConfig} from "./app.config";
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {FlexLayoutModule} from "@angular/flex-layout";
 
 function initializeApp(appConfig: AppConfig) {
   return () => appConfig.load();
@@ -24,7 +26,9 @@ function initializeApp(appConfig: AppConfig) {
       {path: '**', redirectTo: '/', pathMatch: 'full'}
     ]),
     UiModule,
-    PagesModule
+    PagesModule,
+    BrowserAnimationsModule,
+    FlexLayoutModule
   ],
   providers: [
     AppConfig,
