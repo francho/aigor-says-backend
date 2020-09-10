@@ -74,7 +74,7 @@ stages:
         git config --local user.name "Francho Joven"
         git remote add gh-pages git@github.com:francho/aigor-says.git
         git subtree add --prefix=dist gh-pages master
-        git subtree pull gh-pages master
+        git subtree pull --prefix=dist gh-pages master
       displayName: 'Setup GitHub Pages deploy'
     - task: DownloadPipelineArtifact@2
       inputs:
@@ -86,7 +86,7 @@ stages:
         mv dist_orig/* dist
         git add dist/*
         git commit -m "CD deploy. $(Build.Id)"
-        git subtree push --prefix dist gh-pages master 
+        git subtree push --prefix=dist gh-pages master 
       displayName: 'Publish webapp on GitHub Pages'
       condition: |
         and(not(eq(variables['Build.Reason'], 'PullRequest')),
