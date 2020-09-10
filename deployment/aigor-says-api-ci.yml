@@ -62,32 +62,18 @@ stages:
   jobs:
   - job: Deploy_Webapp
     steps:
-    - task: InstallSSHKey@0
-      inputs:
-        knownHostsEntry: 'github.com,140.82.121.3 ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ=='
-        sshPublicKey: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCgS/A/LQyjsOKQTnhCwIW3+SxR6wB2QTqQyqMh5x4Kgf9/mil/4FR3oBc61gSe9ecmTsywu9pGx4jvkcRIqi0ox23Z1/DPLfngr2y4GyZkV50SiByaaYu0HplSK3NN4Fjqtlg+yrwNadBDZ7INY+Ze1ZE0gq/wwZH4sIaYLuwR+xQwua0amR251QE8hFvSwV5UE+S5RZn6KyphtDAnC3iIkh0KHMAhwKQcAKhCP8qI1qZUwsHPrgW4D3EHrUpRO8362JoMjtZ3juMlDxUTXpvU0pEt8Miu5Gum8d2o9nSgY04T3zZdrEjHZQ+Lw28EKqpjrHn0kAOMwlh7GGQrJ6/3x2qMKnwNofPHdu5VpR2r5ED2Bbhf+FsUhZxGar8GzrTcNHNSu9WW99n2otkq6mwrbIa2Oi0QDqFiLHQPJcTb2NGBPxHZHq7Jp5Y3iUZHTqjU+jG0l+F74LhhIGFMZEHf/EQZRTt5u945QMUnVaJaeQtXt+FX9AUFCHPqxWXKcTM= deploy@fuji.local'
-        sshKeySecureFile: 'id_rsa'
-
-    - script: |
-        mkdir dist
-        git config --local user.email "pub@francho.org"
-        git config --local user.name "Francho Joven"
-        git remote add gh-pages git@github.com:francho/aigor-says.git
-        git subtree add --prefix=dist gh-pages master
-        git subtree pull --prefix=dist gh-pages master
-      displayName: 'Setup GitHub Pages deploy'
     - task: DownloadPipelineArtifact@2
       inputs:
         buildType: 'current'
         artifactName: 'AigorSays.WebApp'
-        targetPath: 'dist_orig'
-    - script: |
-        git rm -rf dist/*
-        mv dist_orig/* dist
-        git add dist/*
-        git commit -m "CD deploy. $(Build.Id)"
-        git subtree push --prefix=dist gh-pages master 
-      displayName: 'Publish webapp on GitHub Pages'
-      condition: |
-        and(not(eq(variables['Build.Reason'], 'PullRequest')),
-            eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+        targetPath: '$(System.DefaultWorkingDirectory\dist'
+    
+    - task: GitHubPagesPublish@1
+      inputs:
+        docPath: '$(System.DefaultWorkingDirectory)\dist\*'
+        githubusername: '$(GitHubPagesUser)'
+        githubemail: '$(GitHubPagesEmail)'
+        githubaccesstoken: '$(GitHubPagesAccessToken)'
+        repositoryname: '$(GitHubPagesRepo)'
+        branchname: 'master'
+        commitmessage: 'Automated Release $(Release.ReleaseId)'
